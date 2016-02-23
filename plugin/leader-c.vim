@@ -1,7 +1,14 @@
 "This is leader c plugin, I wanna expand this to a fully runing comment plugin
 
 function! CommentTrigger(...) 
-  let a:modeName = visualmode()
+  let a:modeName = ''
+  if exists("g:lastMod")
+    let a:modeName = g:lastMod
+  endif
+  if a:modeName == 'v'
+    let a:modeName = visualmode()
+  endif
+  
 	let a:comment_word="\\/\\/"
 	if a:0 >= 1
 		let a:comment_word=a:1
@@ -30,7 +37,7 @@ endfunction
 
 let g:comment_map={'vim': '"', 'sh': '#','python': '#','yaml': '#','conf':'#'}
 
-nmap <leader>c :call CommentTrigger()<CR>$
-vmap <leader>c :call CommentTrigger()<CR>$
-imap <leader>c <Esc>ma:call CommentTrigger()<CR>`a
+nmap <leader>c :let g:lastMod='n'<CR>:call CommentTrigger()<CR>$
+vmap <leader>c <Esc>:let g:lastMod='v'<CR>:call CommentTrigger()<CR>$
+imap <leader>c <Esc>ma:let g:lastMod='i'<CR>:call CommentTrigger()<CR>`a
 
