@@ -1,43 +1,55 @@
 "This is leader c plugin, I wanna expand this to a fully runing comment plugin
 
-function! CommentTrigger(...) 
-  let a:modeName = ''
-  if exists("g:lastMod")
-    let a:modeName = g:lastMod
+function! GetCommentWord(default)
+  let a:comment_word = a:default
+	if a:0 >= 1
+		let a:comment_word=a:1
+  else
+    let a:curFileType = &filetype
+    if 1 == has_key(g:comment_map,a:curFileType)
+        let a:comment_word=g:comment_map[a:curFileType]
+    endif
+	endif
+  return a:comment_word
+endfunction
+
+function! CommentTriggerWorker(comment_word)
+  let a:curLine = getline('.')
+
+  if 0 == match(a:curLine, a:comment_word)
+    let a:exec_command = "s\/^".escape(a:comment_word,'/.')."\/"
+  else
+    let a:exec_command = "s\/^\/".escape(a:comment_word, '/.')."/"
   endif
+
+  exec a:exec_command
+endfunction
+
+function! CommentTrigger(mode,...) 
+  exec "normal mx"
+  let a:modeName = a:mode
   if a:modeName == 'v'
     let a:modeName = visualmode()
   endif
   
-	let a:comment_word="\\/\\/"
-	if a:0 >= 1
-		let a:comment_word=a:1
-    else
-        let a:curFileType = &filetype
-        if 1 == has_key(g:comment_map,a:curFileType)
-            let a:comment_word=g:comment_map[a:curFileType]
-        endif
-	endif
   "now comment
+  let a:comment_word = GetCommentWord("\\/\\/")
   if "\\/\\/" == a:comment_word && "v" == a:modeName
     "this is a virtual mode entered by "v"
-    exec "normal gv\"idi\/*\<Esc>\"ipa*\/\<Esc>"
-  else
-    let a:curLine = getline('.')
-
-    if 0 == match(a:curLine, a:comment_word)
-      let a:exec_command = "s\/^".a:comment_word."\/"
-    else
-      let a:exec_command = "s\/^\/".a:comment_word."/"
-    endif
-
+    let a:exec_command = "normal gv\"xdi\/*\<C-r>x*\/\<Esc>"
     exec a:exec_command
+  elseif "v" == a:mode
+    "this is a virsual mode, not entered by "v"
+    exec "'<,'> call CommentTriggerWorker(\"".a:comment_word."\")"
+  else
+    exec "call CommentTriggerWorker(\"".a:comment_word."\")"
   endif
+  exec "normal `x"
 endfunction
 
 let g:comment_map={'vim': '"', 'sh': '#','python': '#','yaml': '#','conf':'#'}
 
-nmap <leader>c :let g:lastMod='n'<CR>:call CommentTrigger()<CR>$
-vmap <leader>c <Esc>:let g:lastMod='v'<CR>:call CommentTrigger()<CR>$
-imap <leader>c <Esc>ma:let g:lastMod='i'<CR>:call CommentTrigger()<CR>`a
+nmap <leader>c :call CommentTrigger('n')<CR>
+vmap <leader>c <Esc>:call CommentTrigger('v')<CR>
+imap <leader>c <Esc>:call CommentTrigger('i')<CR>
 
