@@ -20,13 +20,12 @@ function! CommentTriggerWorker(comment_word)
     let a:exec_command = "s\/^".escape(a:comment_word,'/.')."\/"
   else
     let a:exec_command = "s\/^\/".escape(a:comment_word, '/.')."/"
-  endif
+  endi
 
   exec a:exec_command
 endfunction
 
 function! CommentTrigger(mode,...) 
-  exec "normal mx"
   let a:modeName = a:mode
   if a:modeName == 'v'
     let a:modeName = visualmode()
@@ -36,15 +35,16 @@ function! CommentTrigger(mode,...)
   let a:comment_word = GetCommentWord("\\/\\/")
   if "\\/\\/" == a:comment_word && "v" == a:modeName
     "this is a virtual mode entered by "v"
+    exec "set paste"
     let a:exec_command = "normal gv\"xdi\/*\<C-r>x*\/\<Esc>"
     exec a:exec_command
+    exec "set nopaste"
   elseif "v" == a:mode
     "this is a virsual mode, not entered by "v"
     exec "'<,'> call CommentTriggerWorker(\"".a:comment_word."\")"
   else
     exec "call CommentTriggerWorker(\"".a:comment_word."\")"
   endif
-  exec "normal `x"
 endfunction
 
 let g:comment_map={'vim': '"', 'sh': '#','python': '#','yaml': '#','conf':'#'}
