@@ -35,10 +35,9 @@ function! CommentTrigger(mode,...)
   let a:comment_word = GetCommentWord("\\/\\/")
   if "\\/\\/" == a:comment_word && "v" == a:modeName
     "this is a virtual mode entered by "v"
-    exec "set paste"
-    let a:exec_command = "normal gv\"xdi\/*\<C-r>x*\/\<Esc>"
-    exec a:exec_command
-    exec "set nopaste"
+    exec "call PartComment(\"\\/*\",\"*\\/\",\"".a:modeName."\")"
+  elseif "<!--" == a:comment_word 
+    exec "call PartComment(\"<!--\",\"-->\",\"".a:modeName."\")"
   elseif "v" == a:mode
     "this is a virsual mode, not entered by "v"
     exec "'<,'> call CommentTriggerWorker(\"".a:comment_word."\")"
@@ -47,7 +46,14 @@ function! CommentTrigger(mode,...)
   endif
 endfunction
 
-let g:comment_map={'vim': '"', 'sh': '#','python': '#','yaml': '#','conf':'#'}
+function! PartComment(begin,end,mode)
+    exec "set paste"
+    let a:exec_command = "normal gv\"xdi".a:begin."\<C-r>x".a:end."\<Esc>"
+    exec a:exec_command
+    exec "set nopaste"
+endfunction
+
+let g:comment_map={'vim': '"', 'sh': '#','python': '#','yaml': '#','conf':'#', 'xml':'<!--'}
 
 nmap <leader>c :call CommentTrigger('n')<CR>
 vmap <leader>c <Esc>:call CommentTrigger('v')<CR>
