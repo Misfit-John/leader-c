@@ -10,7 +10,7 @@ function! GetCommentWord(default)
         let a:comment_word=g:comment_map[a:curFileType]
     endif
 	endif
-  return a:comment_word
+  return escape(a:comment_word,'"')
 endfunction
 
 function! CommentTriggerWorker(comment_word)
