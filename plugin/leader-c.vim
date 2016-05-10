@@ -53,7 +53,7 @@ function! PartComment(begin,end,mode)
     exec "set nopaste"
 endfunction
 
-let g:comment_map={'vim': '"', 'sh': '#','python': '#','yaml': '#','conf':'#', 'xml':'<!--'}
+let g:comment_map={'vim': '"', 'sh': '#','python': '#','yaml': '#','conf':'#','cfg':'#', 'xml':'<!--'}
 
 nmap <leader>c :call CommentTrigger('n')<CR>
 vmap <leader>c <Esc>:call CommentTrigger('v')<CR>
