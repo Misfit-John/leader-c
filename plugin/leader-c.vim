@@ -44,7 +44,6 @@ function! CommentTrigger(mode,...)
   else
     exec "call CommentTriggerWorker(\"".a:comment_word."\")"
   endif
-  return ""
 endfunction
 
 function! PartComment(begin,end,mode)
@@ -58,5 +57,5 @@ let g:comment_map={'vim': '"', 'sh': '#','python': '#','yaml': '#','conf':'#','c
 
 nmap <leader>c :call CommentTrigger('n')<CR>
 vmap <leader>c <Esc>:call CommentTrigger('v')<CR>
-imap <buffer> <silent> <leader>c <C-r>=CommentTrigger('i')<CR><ESC>
+imap <leader>c <Esc>:call CommentTrigger('i')<CR>
 
