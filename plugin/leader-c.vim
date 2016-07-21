@@ -16,8 +16,8 @@ endfunction
 function! CommentTriggerWorker(comment_word)
   let a:curLine = getline('.')
 
-  if 0 == match(a:curLine, a:comment_word)
-    let a:exec_command = "s\/^".escape(a:comment_word,'/.')."\/"
+  if 0 == match(a:curLine, "^\\s*".a:comment_word)
+    let a:exec_command = "s\/^\\s*".escape(a:comment_word,'/.')."\/"
   else
     let a:exec_command = "s\/^\/".escape(a:comment_word, '/.')."/"
   endi
@@ -53,7 +53,7 @@ function! PartComment(begin,end,mode)
     exec "set nopaste"
 endfunction
 
-let g:comment_map={'vim': '"', 'sh': '#','python': '#','yaml': '#','conf':'#','cfg':'#', 'xml':'<!--'}
+let g:comment_map={'vim': '"', 'sh': '#','python': '#','yaml': '#','conf':'#','cfg':'#', 'xml':'<!--', 'pig': '--', 'make': '#'}
 
 nmap <leader>c :call CommentTrigger('n')<CR>
 vmap <leader>c <Esc>:call CommentTrigger('v')<CR>
