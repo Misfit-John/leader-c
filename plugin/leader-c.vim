@@ -57,5 +57,4 @@ let g:comment_map={'vim': '"', 'sh': '#','python': '#','yaml': '#','conf':'#','c
 
 nmap <leader>c :call CommentTrigger('n')<CR>
 vmap <leader>c <Esc>:call CommentTrigger('v')<CR>
-imap <leader>c <Esc>:call CommentTrigger('i')<CR>
 
