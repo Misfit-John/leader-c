@@ -25,7 +25,7 @@ function! CommentTriggerWorker(comment_word)
   exec a:exec_command
 endfunction
 
-function! CommentTrigger(mode,...) 
+function! s:CommentTrigger(mode,...) 
   let a:modeName = a:mode
   if a:modeName == 'v'
     let a:modeName = visualmode()
@@ -44,6 +44,7 @@ function! CommentTrigger(mode,...)
   else
     exec "call CommentTriggerWorker(\"".a:comment_word."\")"
   endif
+  return ""
 endfunction
 
 function! PartComment(begin,end,mode)
@@ -55,6 +56,17 @@ endfunction
 
 let g:comment_map={ 'vim': '"', 'sh': '#', 'python': '#', 'yaml': '#', 'conf':'#', 'cfg':'#', 'xml':'<!--', 'pig': '--', 'lua': '--', 'cmake': '#', 'make': '#', 'erlang': '%'}
 
-nmap <leader>c :call CommentTrigger('n')<CR>
-vmap <leader>c <Esc>:call CommentTrigger('v')<CR>
+if !exists("g:comment_key")
+    let g:comment_key='<leader>c'
+endif
+
+let nmap_command = "nmap ".g:comment_key." :call <SID>CommentTrigger('n')<CR>"
+let vmap_command = "vmap ".g:comment_key." :call <SID>CommentTrigger('v')<CR>"
+let imap_command = "imap ".g:comment_key." <C-r>=<SID>CommentTrigger('i')<CR>"
+exec nmap_command
+exec vmap_command
+if -1 == match("^<leader>", g:comment_key)
+    exec imap_command
+endif
+
 
