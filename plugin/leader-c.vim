@@ -54,7 +54,7 @@ function! PartComment(begin,end,mode)
     exec "set nopaste"
 endfunction
 
-let g:comment_map={'zsh': '#', 'vim': '"', 'sh': '#', 'python': '#', 'yaml': '#', 'conf':'#', 'cfg':'#', 'xml':'<!--', 'pig': '--', 'lua': '--', 'cmake': '#', 'make': '#', 'erlang': '%'}
+let g:comment_map={'cmake': '#','zsh': '#', 'vim': '"', 'sh': '#', 'python': '#', 'yaml': '#', 'conf':'#', 'cfg':'#', 'xml':'<!--', 'pig': '--', 'lua': '--', 'cmake': '#', 'make': '#', 'erlang': '%'}
 
 if !exists("g:comment_key")
     let g:comment_key='<leader>c'
