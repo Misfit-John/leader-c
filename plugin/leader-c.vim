@@ -65,7 +65,7 @@ let vmap_command = "vmap ".g:comment_key." :call <SID>CommentTrigger('n')<CR>"
 let imap_command = "imap ".g:comment_key." <C-r>=<SID>CommentTrigger('i')<CR>"
 exec nmap_command
 exec vmap_command
-if -1 == match("^<leader>", g:comment_key)
+if -1 == match(g:comment_key, "^<leader>")
     exec imap_command
 endif
 
